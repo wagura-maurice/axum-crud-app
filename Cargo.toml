@@ -1,8 +1,9 @@
+# Cargo.toml
 [package]
 name = "axum-crud-app"
 version = "0.1.0"
 edition = "2021"
-authors = [ "Wagura Maurice <business@waguramaurice.com>" ]
+authors = ["Wagura Maurice <business@waguramaurice.com>"]
 
 [package.metadata.release]
 release = false
@@ -15,15 +16,14 @@ wasm-opt = false
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = { version="0.4.1", features=['http', 'axum'] }
-worker-macros = { version="0.4.1", features=['http'] }
-axum  = { version = "0.7", default-features = false }
+worker = { version = "0.5", features = ["http", "axum"] }
+worker-macros = { version = "0.5", features = ["http"] }
+axum = { version = "0.7", features = ["tokio", "macros"] }
 tower-service = "0.3.2"
-console_error_panic_hook = { version = "0.1.1" }
-sqlx = "0.8.2"
-jsonwebtoken = "9.3.0"
-argon2 = "0.5.3"
-serde = "1.0.210"
-serde_json = "1.0.128"
-tokio = "1.40.0"
-tower = "0.5.1"
+console_error_panic_hook = { version = "0.1.7" }
+sqlx = { version = "0.7", features = ["postgres", "runtime-tokio-native-tls", "macros"] }
+tower = "0.4.13"
+jsonwebtoken = { version = "8.2", default-features = false, features = ["serde"] }
+tokio = { version = "1.28", features = ["full"] }
+serde = { version = "1.0.163", features = ["derive"] }
+serde_json = "1.0.107"

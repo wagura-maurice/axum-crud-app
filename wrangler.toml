@@ -1,6 +1,20 @@
+# wrangler.toml
 name = "axum-crud-app"
 main = "build/worker/shim.mjs"
 compatibility_date = "2024-09-26"
 
 [build]
+# Command to build your Rust project for Cloudflare Workers
 command = "cargo install -q worker-build && worker-build --release"
+
+# Define the environment for Cloudflare Workers
+[env.production]
+# Add any production-specific settings here
+
+# Using Cloudflare D1 for SQLite database
+[[d1_databases]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "axum-crud-d1"
+database_id = "940be578-121d-40a9-be02-ffc86d28f37f"
+
+# Additional settings can be added as needed
