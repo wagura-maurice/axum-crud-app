@@ -21,7 +21,7 @@ pub async fn root() -> &'static str {
     "Hello Axum!"
 }
 
-using SQLx i want an auth logi that will use d1 staorage an will have queri runnin to it to achive the flooing api requrment for the todo app
+/* using SQLx i want an auth logi that will use d1 staorage an will have queri runnin to it to achive the flooing api requrment for the todo app
 
 Auth: - hav a jwt logic similar to larvels santuc logi for api auth
     /sign-up
@@ -37,4 +37,4 @@ Application:
     /dashboard -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
     /profile -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
     /account -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
-    /settings -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
+    /settings -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things */
