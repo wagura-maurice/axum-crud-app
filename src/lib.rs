@@ -1,40 +1,41 @@
 // src/lib.rs
-use axum::{routing::get, Router};
-use tower_service::Service;
-use worker::*;
+use actix_web::{web, App, HttpServer, middleware};
+use actix_cors::Cors;
+use sqlx::sqlite::SqlitePool;  // Use SqlitePool instead of PgPool
+use dotenv::dotenv;
+use std::env;
 
-fn router() -> Router {
-    Router::new().route("/", get(root))
+mod controllers;
+mod models;
+mod services;
+mod utils;
+
+// Define the environment interface for D1 binding
+pub interface Env {
+    DB: D1Database;  // This refers to the D1Database binding set in wrangler.toml
 }
 
-#[event(fetch)]
-async fn fetch(
-    req: HttpRequest,
-    _env: Env,
-    _ctx: Context,
-) -> Result<axum::http::Response<axum::body::Body>> {
-    console_error_panic_hook::set_once();
-    Ok(router().call(req).await?)
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+
+    // For local development, use a DATABASE_URL from the environment
+    let database_url = env::var("DATABASE_URL")
+        .unwrap_or_else(|_| "sqlite://cloudflare-d1-database".to_string());
+
+    // Connect to SQLite (D1 database)
+    let pool = SqlitePool::connect(&database_url)
+        .await
+        .expect("Failed to create SQLite pool.");
+
+    HttpServer::new(move || {
+        App::new()
+            .app_data(web::Data::new(pool.clone()))
+            .wrap(Cors::default())
+            .configure(controllers::config)
+            .wrap(middleware::Logger::default())
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
 }
-
-pub async fn root() -> &'static str {
-    "Hello Axum!"
-}
-
-/* using SQLx i want an auth logi that will use d1 staorage an will have queri runnin to it to achive the flooing api requrment for the todo app
-
-Auth: - hav a jwt logic similar to larvels santuc logi for api auth
-    /sign-up
-    /sign-in
-    /request-otp
-    /verify-otp/ inclus the signiture an token logic the the post request should have
-    /forgot-password
-    /reset-password/inclus the signiture an token logic the the post request should have
-    /verify-account/inclus the signiture an token logic the the post request should have
-    /sign-out/ this shoul be done using the bere token in the herder. thus it confirmas done or not you understant.
-
-Application:
-    /dashboard -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
-    /profile -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
-    /account -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things
-    /settings -show the home statiscis i.e return the json nedd to build up the reporting logic for the systams ui side of things */
