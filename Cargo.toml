@@ -26,7 +26,7 @@ worker-macros = { version="0.4.1", features=['http'] }
 axum  = { version = "0.7", default-features = false }
 tower-service = "0.3.2"
 console_error_panic_hook = { version = "0.1.1" }
-sqlx = { version = "0.7", features = ["sqlite", "runtime-tokio-native-tls", "macros"] }
+sqlx = { version = "0.8", features = ["sqlite", "runtime-tokio-native-tls", "macros"] }
 tower = "0.4.13"
 jsonwebtoken = "9.3.0"
 tokio = { version = "1.28", features = ["full"] }
